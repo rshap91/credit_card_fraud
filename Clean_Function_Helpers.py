@@ -43,8 +43,10 @@ def remove_outliers(df, S=3, std=True, subset_rows=None, subset_cols=None):
     sort_values: STRING or LIST of STRINGS; Column name(s) to sort resulting dataframe on.
     
     '''
-    subset_rows = subset_rows or df.index
-    subset_cols = subset_cols or df.select_dtypes('number').columns
+    if isinstance(subset_cols, type(None)):
+        subset_cols = df.select_dtypes('number').columns
+    if isinstance(subset_rows, type(None)):
+        subset_rows = df.index
     
     included = df.loc[subset_rows, subset_cols]
     
@@ -62,7 +64,8 @@ def scale_data(df, scaler, subset_cols=None, fit=True):
     scaler: Instantiated (and optionally already fit) instance of sklearn scaler or similar
     
     """
-    subset_cols = subset_cols or df.columns
+    if isinstance(subset_cols, type(None)):
+        subset_cols = df.select_dtypes('number').columns
     
     cdf = df.copy()
     
@@ -84,7 +87,6 @@ def deskew_df(df, subset_cols=None, threshold=None, topn=None, method=np.sqrt):
         NOTE: if none of subset_cols, threshold, topn are specified, all columns are deskewed.
     method: function to transform data. Defaults to boxcox.
     """
-    assert (df[subset_cols] >= 0).all().all(), 'Data must be positive.'
     
     if subset_cols:
         include = subset_cols
@@ -94,6 +96,7 @@ def deskew_df(df, subset_cols=None, threshold=None, topn=None, method=np.sqrt):
         include = df.skew().abs().sort_values(ascending=False).index[:topn].tolist()
     else:
         include = df.columns.tolist()
+    assert (df[include] >= 0).all().all(), 'Data must be positive.' 
     exclude = df.columns[~df.columns.isin(include)].tolist()
 
     return df.apply(lambda ser: ser.map(method) if ser.name in include else ser)
