@@ -27,7 +27,7 @@ I took three different approaches to working with this dataset.
         - Isolation Forests
         - One Class SVM
         - Clustering
-          - DBSCAN, Hierarchical, Model-based Bayesian Clustering
+          - KMeans, Model-based Bayesian Clustering
     3. Combining steps 1 and 2.
         - Use the outputs from the anomaly detection techniques as additional features
         in the classification models.
