@@ -15,7 +15,6 @@ I took three different approaches to working with this dataset.
 
     1. Use classifiers to model the difference between real and fraudulent charges.
         - Logistic Regression
-        - NaiveBayes
         - Tree Ensembles
         - KNN
         - Try Over and Under Sampling
